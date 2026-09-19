@@ -1,4 +1,5 @@
 import { useInView } from 'react-intersection-observer';
+import { FileDown } from 'lucide-react';
 
 export default function Contact() {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
@@ -19,10 +20,19 @@ export default function Contact() {
           >
             Let's work together.
           </h2>
-          <p className="text-lg text-slate-500 dark:text-zinc-400 leading-relaxed font-light">
+          <p className="text-lg text-slate-500 dark:text-zinc-400 leading-relaxed font-light mb-8">
             Have a project in mind or just want to say hi? Fill out the form below and I'll get back
             to you as soon as I can.
           </p>
+          <a
+            href="https://fileko.fruitask.com/files/e91e802a-a7c2-4c30-b8ac-caaf9a7a1c1d"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold text-base hover:bg-slate-700 dark:hover:bg-zinc-200 transition-colors shadow-[0_4px_14px_rgba(0,0,0,0.1)] focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-zinc-950"
+          >
+            <FileDown size={18} aria-hidden="true" />
+            Download Resume
+          </a>
         </div>
 
         <div
