@@ -40,7 +40,13 @@ export default function TechStack() {
                     {group.items.map((item) => (
                       <li key={item.name} role="listitem">
                         <span className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-xl bg-white/60 dark:bg-white/5 border border-white dark:border-white/10 text-sm font-medium text-slate-600 dark:text-zinc-300 shadow-sm hover:bg-white/90 dark:hover:bg-white/10 hover:text-slate-800 dark:hover:text-white transition-colors">
-                          <span className="text-slate-500 dark:text-slate-400" aria-hidden="true">{item.icon}</span>
+                          <span className="flex items-center justify-center w-5 h-5 text-slate-500 dark:text-slate-400" aria-hidden="true">
+                            {item.icon.startsWith('/') ? (
+                              <img src={item.icon} alt="" className="w-full h-full object-contain" />
+                            ) : (
+                              item.icon
+                            )}
+                          </span>
                           {item.name}
                         </span>
                       </li>
