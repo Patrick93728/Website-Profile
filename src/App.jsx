@@ -1,4 +1,3 @@
-import './index.css';
 import Hero from './components/Hero';
 import CapabilityHighlights from './components/CapabilityHighlights';
 import Services from './components/Services';
@@ -8,17 +7,21 @@ import TechStack from './components/TechStack';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 
+import ThemeToggle from './components/ThemeToggle';
+
 function App() {
   return (
     <>
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-[#2563EB] focus:text-white focus:rounded-lg focus:text-sm focus:font-semibold"
-      >
+      <a href="#home" className="sr-only focus:not-sr-only focus:absolute focus:z-[9999] focus:p-4 focus:bg-white focus:text-black">
         Skip to main content
       </a>
+      <ThemeToggle />
+      {/* Ambient Background Orbs */}
+      <div className="bg-orb-1" aria-hidden="true" />
+      <div className="bg-orb-2" aria-hidden="true" />
 
-      <main id="main-content">
+      {/* Main Content */}
+      <main className="relative z-10">
         <Hero />
         <CapabilityHighlights />
         <Services />
@@ -27,7 +30,6 @@ function App() {
         <TechStack />
         <Contact />
       </main>
-
       <Footer />
     </>
   );

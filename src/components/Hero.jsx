@@ -16,67 +16,54 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-[#F8FAFC]"
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden"
       aria-labelledby="hero-heading"
     >
-      {/* Subtle grid background */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage:
-            'linear-gradient(#0F172A 1px, transparent 1px), linear-gradient(90deg, #0F172A 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }}
-        aria-hidden="true"
-      />
-
       <div className="section-container relative z-10 py-24 md:py-32">
         <div className="max-w-3xl">
-          {/* Eyebrow */}
-          <p className="text-xs font-bold tracking-widest text-[#64748B] uppercase mb-6">
+          <p className="text-xs font-semibold tracking-[0.18em] text-slate-400 dark:text-zinc-500 uppercase mb-6">
             Digital Solutions&nbsp;&nbsp;·&nbsp;&nbsp;Development&nbsp;&nbsp;·&nbsp;&nbsp;Design
           </p>
 
-          {/* Heading */}
           <h1
             id="hero-heading"
-            className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#0F172A] leading-[1.15] tracking-tight mb-6"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 dark:text-zinc-50 leading-[1.08] tracking-tight mb-6"
           >
-            Build better digital experiences with{' '}
-            <span className="text-[#2563EB]">practical software solutions.</span>
+            You know your business.{' '}
+            <span className="text-slate-600 dark:text-zinc-300">
+              I know the code. Let's build something real.
+            </span>
           </h1>
 
-          {/* Supporting text */}
-          <p className="text-lg md:text-xl text-[#64748B] leading-relaxed mb-10 max-w-2xl">
+          <p className="text-lg md:text-xl text-slate-500 dark:text-zinc-400 leading-relaxed mb-10 max-w-2xl font-light">
             {siteConfig.description}
           </p>
 
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-3 mb-12">
+          <div className="flex flex-col sm:flex-row gap-4 mb-12 relative z-20">
             <a
               href={`mailto:${siteConfig.email}`}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#2563EB] text-white font-semibold text-base hover:bg-[#1D4ED8] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-2"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold text-base hover:bg-slate-700 dark:hover:bg-zinc-200 transition-colors shadow-[0_4px_14px_rgba(0,0,0,0.1)] focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-zinc-950"
             >
-              Contact Us
+              Contact Me
               <ArrowRight size={18} aria-hidden="true" />
             </a>
+            
             <button
               onClick={() => scrollTo('projects')}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-[#E2E8F0] bg-white text-[#0F172A] font-semibold text-base hover:bg-[#F8FAFC] hover:border-[#CBD5E1] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-2"
+              className="glass-panel hover:bg-white/80 dark:hover:bg-white/10 transition-colors inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-slate-700 dark:text-zinc-100 font-semibold text-base focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-zinc-950"
             >
-              Explore My Work
+              View My Work
             </button>
           </div>
 
-          {/* Trust points */}
-          <div className="flex flex-wrap gap-2" role="list" aria-label="Key capabilities">
+          <div className="flex flex-wrap gap-3" role="list" aria-label="Key capabilities">
             {trustPoints.map((point) => (
               <span
                 key={point}
                 role="listitem"
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-white border border-[#E2E8F0] text-[#475569] shadow-sm"
+                className="glass-panel inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium text-slate-500 dark:text-zinc-300"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB]" aria-hidden="true" />
+                <span className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-zinc-500" aria-hidden="true" />
                 {point}
               </span>
             ))}
@@ -84,10 +71,9 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll cue */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-[#94A3B8]">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-300 dark:text-zinc-600">
         <span className="text-xs font-semibold tracking-widest uppercase">Scroll</span>
-        <ChevronDown size={16} className="animate-bounce" aria-hidden="true" />
+        <ChevronDown size={18} className="animate-bounce" aria-hidden="true" />
       </div>
     </section>
   );

@@ -17,17 +17,17 @@ describe('App', () => {
 
   it('renders the Hero heading', () => {
     render(<App />);
-    expect(screen.getByRole('heading', { name: /Build better digital experiences/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /You know your business. experiences/i })).toBeInTheDocument();
   });
 
   it('renders the Services heading', () => {
     render(<App />);
-    expect(screen.getByRole('heading', { name: /What I can help you build/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /I know the code./i })).toBeInTheDocument();
   });
 
   it('renders the Projects heading', () => {
     render(<App />);
-    expect(screen.getByRole('heading', { name: /From ideas to working solutions/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Let’s build something real./i })).toBeInTheDocument();
   });
 
   it('renders the About heading', () => {

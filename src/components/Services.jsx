@@ -7,35 +7,41 @@ function ServiceCard({ service, delay }) {
   const Icon = service.icon;
 
   return (
-    <article
+    <div
       ref={ref}
-      className={`flex flex-col gap-5 p-6 rounded-2xl bg-white border border-[#E2E8F0] hover:shadow-md hover:border-[#CBD5E1] transition-all duration-300 h-full ${
+      className={`h-full transition-all duration-700 ${
         inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}
-      style={{ transitionDelay: `${delay}ms`, transition: `opacity 0.7s ease ${delay}ms, transform 0.7s ease ${delay}ms, box-shadow 0.3s, border-color 0.3s` }}
-      aria-labelledby={`service-title-${service.id}`}
+      style={{ transitionDelay: `${delay}ms` }}
     >
-      <div className="w-11 h-11 rounded-xl bg-[#EFF6FF] flex items-center justify-center shrink-0">
-        <Icon size={22} className="text-[#2563EB]" aria-hidden="true" />
+      <div className="glass-panel glass-panel-hover rounded-[28px] h-full overflow-hidden">
+        <article
+          className="flex flex-col gap-5 p-8 h-full"
+          aria-labelledby={`service-title-${service.id}`}
+        >
+          <div className="w-14 h-14 rounded-2xl bg-white/80 dark:bg-white/5 border border-white dark:border-white/10 flex items-center justify-center shrink-0 shadow-sm dark:shadow-none">
+            <Icon size={26} className="text-slate-500 dark:text-slate-400" aria-hidden="true" />
+          </div>
+          <div>
+            <h3 id={`service-title-${service.id}`} className="font-bold text-slate-800 dark:text-zinc-100 text-xl mb-3">
+              {service.title}
+            </h3>
+            <p className="text-sm hidden text-slate-500 dark:text-zinc-400 leading-relaxed font-light">{service.description}</p>
+          </div>
+          <ul className="flex flex-col gap-3 dark:border-white/5">
+            {service.deliverables.slice(0, 5).map((item) => (
+              <li key={item} className="flex items-start gap-3 text-sm text-slate-600 dark:text-zinc-300">
+                <Check size={18} className="text-emerald-500 dark:text-emerald-400 mt-0.5 shrink-0" aria-hidden="true" />
+                {item}
+              </li>
+            ))}
+            {service.deliverables.length > 5 && (
+              <li className="text-xs text-slate-400 dark:text-zinc-500 font-medium pl-7 mt-1">+{service.deliverables.length - 5} more</li>
+            )}
+          </ul>
+        </article>
       </div>
-      <div>
-        <h3 id={`service-title-${service.id}`} className="font-bold text-[#0F172A] text-lg mb-2">
-          {service.title}
-        </h3>
-        <p className="text-sm text-[#64748B] leading-relaxed">{service.description}</p>
-      </div>
-      <ul className="flex flex-col gap-1.5 mt-auto pt-4 border-t border-[#F1F5F9]">
-        {service.deliverables.slice(0, 5).map((item) => (
-          <li key={item} className="flex items-start gap-2 text-sm text-[#475569]">
-            <Check size={14} className="text-[#16A34A] mt-0.5 shrink-0" aria-hidden="true" />
-            {item}
-          </li>
-        ))}
-        {service.deliverables.length > 5 && (
-          <li className="text-xs text-[#94A3B8] pl-5">+{service.deliverables.length - 5} more</li>
-        )}
-      </ul>
-    </article>
+    </div>
   );
 }
 
@@ -43,25 +49,25 @@ export default function Services() {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.05 });
 
   return (
-    <section id="services" className="py-20 md:py-28 bg-[#F8FAFC]" aria-labelledby="services-heading">
+    <section id="services" className="py-20 md:py-32 relative z-10" aria-labelledby="services-heading">
       <div className="section-container">
         <div
           ref={ref}
-          className={`max-w-2xl mb-12 transition-all duration-700 ${
+          className={`max-w-2xl mb-16 transition-all duration-700 ${
             inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
-          <p className="text-xs font-bold tracking-widest text-[#2563EB] uppercase mb-3">Services</p>
-          <h2 id="services-heading" className="text-4xl md:text-5xl font-extrabold text-[#0F172A] mb-5 tracking-tight">
+          <p className="text-xs font-bold tracking-widest text-slate-500 dark:text-slate-400 uppercase mb-4">Services</p>
+          <h2 id="services-heading" className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-800 dark:text-zinc-50 mb-6 tracking-tight">
             What I can help you build.
           </h2>
-          <p className="text-lg text-[#64748B] leading-relaxed">
+          <p className="text-lg text-slate-500 dark:text-zinc-400 leading-relaxed font-light">
             From initial ideas to working products — practical development and design services
             tailored to your project.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 md:gap-8">
           {services.map((service, i) => (
             <ServiceCard key={service.id} service={service} delay={i * 70} />
           ))}

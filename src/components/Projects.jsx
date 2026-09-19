@@ -5,11 +5,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { fetchProjectsFromFruitask } from '../services/fruitask';
 import { projects as fallbackProjects } from '../data/projects';
 
-const statusColors = {
-  Completed: 'bg-green-50 text-green-700 border-green-200',
-  'In Progress': 'bg-amber-50 text-amber-700 border-amber-200',
-};
-
 // ── Lightbox Carousel ─────────────────────────────────────────────
 function Lightbox({ images, startIndex, title, onClose }) {
   const [current, setCurrent] = useState(startIndex);
@@ -22,7 +17,6 @@ function Lightbox({ images, startIndex, title, onClose }) {
     setCurrent((c) => (c + 1) % images.length);
   }, [images.length]);
 
-  // Keyboard navigation
   useEffect(() => {
     const handler = (e) => {
       if (e.key === 'ArrowLeft') prev();
@@ -33,7 +27,6 @@ function Lightbox({ images, startIndex, title, onClose }) {
     return () => window.removeEventListener('keydown', handler);
   }, [prev, next, onClose]);
 
-  // Prevent body scroll while open
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = ''; };
@@ -41,75 +34,66 @@ function Lightbox({ images, startIndex, title, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/90 backdrop-blur-md"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-label={`Image gallery for ${title}`}
     >
-      {/* Panel — stop clicks propagating to backdrop */}
       <div
-        className="relative flex flex-col items-center max-w-4xl w-full mx-4"
+        className="relative flex flex-col items-center max-w-5xl w-full mx-4"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute -top-12 right-0 text-white/70 hover:text-white transition-colors focus:outline-none"
+          className="absolute -top-14 right-0 text-white/50 hover:text-white transition-colors focus:outline-none"
           aria-label="Close gallery"
         >
-          <X size={28} />
+          <X size={32} />
         </button>
 
-        {/* Main image */}
-        <div className="relative w-full rounded-2xl overflow-hidden bg-[#0F172A] shadow-2xl">
+        <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl">
           <img
             key={current}
             src={images[current]}
             alt={`${title} – image ${current + 1} of ${images.length}`}
-            className="w-full max-h-[70vh] object-contain animate-fadeIn"
+            className="w-full max-h-[75vh] object-contain animate-fadeIn rounded-2xl border border-white/10"
           />
 
-          {/* Prev / Next arrows (only when more than 1 image) */}
           {images.length > 1 && (
             <>
               <button
                 onClick={prev}
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/75 text-white flex items-center justify-center transition-colors focus:outline-none"
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors focus:outline-none border border-white/10"
                 aria-label="Previous image"
               >
-                <ChevronLeft size={22} />
+                <ChevronLeft size={24} />
               </button>
               <button
                 onClick={next}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/75 text-white flex items-center justify-center transition-colors focus:outline-none"
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors focus:outline-none border border-white/10"
                 aria-label="Next image"
               >
-                <ChevronRight size={22} />
+                <ChevronRight size={24} />
               </button>
             </>
           )}
         </div>
 
-        {/* Dot indicators + counter */}
         {images.length > 1 && (
-          <div className="flex items-center gap-3 mt-4">
+          <div className="flex items-center gap-4 mt-6">
             {images.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrent(i)}
-                className={`w-2 h-2 rounded-full transition-all focus:outline-none ${
-                  i === current ? 'bg-white scale-125' : 'bg-white/40 hover:bg-white/70'
+                className={`w-2.5 h-2.5 rounded-full transition-all focus:outline-none ${
+                  i === current ? 'bg-white scale-125' : 'bg-white/30 hover:bg-white/60'
                 }`}
                 aria-label={`Go to image ${i + 1}`}
               />
             ))}
           </div>
         )}
-
-        <p className="text-white/50 text-xs mt-2">
-          {current + 1} / {images.length}
-        </p>
       </div>
     </div>
   );
@@ -119,116 +103,111 @@ function Lightbox({ images, startIndex, title, onClose }) {
 function ProjectCard({ project, delay, onImageClick }) {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.08 });
 
-  // clickable if there's at least one image — either from the images array or the single image field
   const allImages = project.images && project.images.length > 0
     ? project.images
     : project.image ? [project.image] : [];
   const hasImages = allImages.length > 0;
 
   return (
-    <article
+    <div
       ref={ref}
-      className={`flex flex-col rounded-2xl bg-white border border-[#E2E8F0] overflow-hidden hover:shadow-md hover:border-[#CBD5E1] h-full transition-all duration-300 ${
-        inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+      className={`h-full transition-all duration-700 ${
+        inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
       }`}
-      style={{
-        transitionDelay: `${delay}ms`,
-        transition: `opacity 0.7s ease ${delay}ms, transform 0.7s ease ${delay}ms, box-shadow 0.3s, border-color 0.3s`,
-      }}
-      aria-labelledby={`project-title-${project.id}`}
+      style={{ transitionDelay: `${delay}ms` }}
     >
-      {/* Clickable image area */}
-      <div
-        className={`aspect-video bg-[#F1F5F9] flex items-center justify-center overflow-hidden relative group ${hasImages ? 'cursor-zoom-in' : ''}`}
-        onClick={() => hasImages && onImageClick(allImages, project.title)}
-        role={hasImages ? 'button' : undefined}
-        tabIndex={hasImages ? 0 : undefined}
-        aria-label={hasImages ? `View images for ${project.title}` : undefined}
-        onKeyDown={(e) => { if (hasImages && (e.key === 'Enter' || e.key === ' ')) onImageClick(allImages, project.title); }}
-      >
-        {project.image || allImages[0] ? (
-          <>
-            <img
-              src={project.image || allImages[0]}
-              alt={`Screenshot of ${project.title}`}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
-            />
-            {/* Hover overlay */}
-            {hasImages && (
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
-                <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-sm font-semibold bg-black/60 px-4 py-2 rounded-full backdrop-blur-sm">
-                  {allImages.length > 1 ? `View ${allImages.length} images` : 'View image'}
-                </span>
-              </div>
-            )}
-          </>
-        ) : (
-          <div className="flex flex-col items-center gap-2 text-[#CBD5E1]">
-            <ImageOff size={32} aria-hidden="true" />
-            <span className="text-xs font-semibold tracking-widest uppercase">Coming soon</span>
-          </div>
-        )}
-      </div>
-
-
-      {/* Content */}
-      <div className="p-6 flex flex-col gap-4 flex-1">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-bold text-[#64748B] uppercase tracking-wider">{project.category}</span>
-          {(project.role || project.status) && (
+      <div className="glass-panel glass-panel-hover rounded-[28px] h-full overflow-hidden flex flex-col group/card">
+        {/* Clickable image area */}
+        <div
+          className={`aspect-video bg-slate-100/50 dark:bg-white/5 flex items-center justify-center overflow-hidden relative group/img ${hasImages ? 'cursor-zoom-in' : ''}`}
+          onClick={() => hasImages && onImageClick(allImages, project.title)}
+          role={hasImages ? 'button' : undefined}
+          tabIndex={hasImages ? 0 : undefined}
+          aria-label={hasImages ? `View images for ${project.title}` : undefined}
+          onKeyDown={(e) => { if (hasImages && (e.key === 'Enter' || e.key === ' ')) onImageClick(allImages, project.title); }}
+        >
+          {project.image || allImages[0] ? (
             <>
-              <span className="text-[#E2E8F0]">·</span>
-              <span className="text-xs font-bold uppercase tracking-wider border px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border-blue-200">
-                {project.role || project.status}
-              </span>
+              <img
+                src={project.image || allImages[0]}
+                alt={`Screenshot of ${project.title}`}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-[1.03] opacity-95 group-hover/card:opacity-100"
+                loading="lazy"
+              />
+              {hasImages && (
+                <div className="absolute inset-0 bg-slate-900/0 group-hover/img:bg-slate-900/20 dark:group-hover/img:bg-black/40 transition-all duration-300 flex items-center justify-center">
+                  <span className="opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 text-slate-800 dark:text-white text-sm font-semibold bg-white/90 dark:bg-white/20 border border-white dark:border-white/30 px-6 py-2.5 rounded-full shadow-lg dark:backdrop-blur-md translate-y-4 group-hover/img:translate-y-0">
+                    {allImages.length > 1 ? `View ${allImages.length} images` : 'View image'}
+                  </span>
+                </div>
+              )}
             </>
+          ) : (
+            <div className="flex flex-col items-center gap-3 text-slate-400 dark:text-white/30">
+              <ImageOff size={36} aria-hidden="true" />
+              <span className="text-xs font-semibold tracking-widest uppercase">Coming soon</span>
+            </div>
           )}
         </div>
 
-        <div>
-          <h3 id={`project-title-${project.id}`} className="font-bold text-[#0F172A] text-xl mb-2">
-            {project.title}
-          </h3>
-          <p className="text-sm text-[#64748B] leading-relaxed">{project.summary}</p>
-        </div>
-
-        {project.technologies && project.technologies.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
-            {project.technologies.map((tech) => (
-              <span key={tech} className="text-xs font-semibold px-2.5 py-1 rounded-md bg-[#F1F5F9] text-[#475569]">
-                {tech}
-              </span>
-            ))}
+        {/* Content */}
+        <div className="p-8 flex flex-col gap-5 flex-1 border-t border-slate-200/50 dark:border-white/5">
+          <div className="flex items-center gap-3 flex-wrap">
+            <span className="text-xs font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-widest">{project.category}</span>
+            {(project.role || project.status) && (
+              <>
+                <span className="text-slate-300 dark:text-white/20">·</span>
+                <span className="text-xs font-bold uppercase tracking-wider border px-3 py-1 rounded-full bg-slate-50 dark:bg-slate-100 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-200 shadow-sm dark:shadow-inner">
+                  {project.role || project.status}
+                </span>
+              </>
+            )}
           </div>
-        )}
 
-        <div className="flex gap-4 mt-auto pt-4 border-t border-[#F1F5F9]">
-          {project.liveUrl && (
-            <a
-              href={project.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#2563EB] hover:text-[#1D4ED8] transition-colors"
-            >
-              <ExternalLink size={15} aria-hidden="true" />
-              Live Demo
-            </a>
+          <div>
+            <h3 id={`project-title-${project.id}`} className="font-bold text-slate-800 dark:text-zinc-100 text-2xl mb-3">
+              {project.title}
+            </h3>
+            <p className="text-sm text-slate-500 dark:text-zinc-400 leading-relaxed font-light">{project.summary}</p>
+          </div>
+
+          {project.technologies && project.technologies.length > 0 && (
+            <div className="flex flex-wrap gap-2 pt-2">
+              {project.technologies.map((tech) => (
+                <span key={tech} className="text-xs font-medium px-3 py-1.5 rounded-lg bg-white/60 dark:bg-white/5 border border-white dark:border-white/10 text-slate-500 dark:text-zinc-300 shadow-sm dark:shadow-none">
+                  {tech}
+                </span>
+              ))}
+            </div>
           )}
-          {project.repoUrl && (
-            <a
-              href={project.repoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#64748B] hover:text-[#0F172A] transition-colors ml-auto"
-            >
-              <FaGithub size={15} aria-hidden="true" />
-              Repo
-            </a>
-          )}
+
+          <div className="flex gap-5 mt-auto pt-6 border-t border-slate-200/50 dark:border-white/5">
+            {project.liveUrl && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
+              >
+                <ExternalLink size={16} aria-hidden="true" />
+                Live Demo
+              </a>
+            )}
+            {project.repoUrl && (
+              <a
+                href={project.repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-medium text-slate-400 dark:text-zinc-400 hover:text-slate-700 dark:hover:text-zinc-100 transition-colors ml-auto"
+              >
+                <FaGithub size={16} aria-hidden="true" />
+                Repository
+              </a>
+            )}
+          </div>
         </div>
       </div>
-    </article>
+    </div>
   );
 }
 
@@ -237,7 +216,7 @@ export default function Projects() {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.05 });
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [lightbox, setLightbox] = useState(null); // { images, title }
+  const [lightbox, setLightbox] = useState(null);
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -261,30 +240,30 @@ export default function Projects() {
 
   return (
     <>
-      <section id="projects" className="py-20 md:py-28 bg-white" aria-labelledby="projects-heading">
+      <section id="projects" className="py-20 md:py-32 relative z-10" aria-labelledby="projects-heading">
         <div className="section-container">
           <div
             ref={ref}
-            className={`max-w-2xl mb-12 transition-all duration-700 ${
+            className={`max-w-2xl mb-16 transition-all duration-700 ${
               inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
-            <p className="text-xs font-bold tracking-widest text-[#2563EB] uppercase mb-3">Work</p>
-            <h2 id="projects-heading" className="text-4xl md:text-5xl font-extrabold text-[#0F172A] mb-5 tracking-tight">
-              From ideas to working solutions.
+            <p className="text-xs font-bold tracking-widest text-slate-500 dark:text-slate-400 uppercase mb-4">Work</p>
+            <h2 id="projects-heading" className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-800 dark:text-zinc-50 mb-6 tracking-tight">
+              My Projects.
             </h2>
-            <p className="text-lg text-[#64748B] leading-relaxed">
+            <p className="text-lg hidden text-slate-500 dark:text-zinc-400 leading-relaxed font-light">
               Selected projects demonstrating my approach to development, design, and problem-solving.
             </p>
           </div>
 
           {loading ? (
             <div className="flex justify-center items-center py-20">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2563EB]" />
-              <span className="ml-3 text-[#64748B]">Loading projects...</span>
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-slate-400" />
+              <span className="ml-4 text-slate-500 dark:text-zinc-400 font-medium tracking-wide">Loading projects from Fruitask...</span>
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
               {projects.map((project, i) => (
                 <ProjectCard
                   key={project.id}
@@ -298,7 +277,6 @@ export default function Projects() {
         </div>
       </section>
 
-      {/* Lightbox Portal */}
       {lightbox && (
         <Lightbox
           images={lightbox.images}
